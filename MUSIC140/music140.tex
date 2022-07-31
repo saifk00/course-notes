@@ -1,0 +1,367 @@
+\documentclass[11pt]{report}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{mathpazo}
+\usepackage{amsmath}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{parskip}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\tikzstyle{Si}=[circle,draw=blue,fill=blue!50,thick]
+\usepackage{listings}
+\newcommand{\imp}[1]{\textbf{#1}}
+\newcommand{\idate}[2]{\textcolor{blue!50}{\imp{#1}}\label{date:#2}}
+\newcommand{\bl}{\begin{itemize}}
+\newcommand{\kl}{\end{itemize}}
+\newcommand{\song}[2]{\textcolor{red!70}{\textbf{#1}} (\idate{#2}{#1})}
+
+\lstset{numbers=left}
+
+% Make lists condensed %
+\usepackage{enumitem}
+\setlist{nosep}
+
+\begin{document}
+
+\chapter{The Big Band Era}
+\chapter{The Blues}
+\chapter{Technological Developments}
+\chapter{The Beginning of Rock 'n' Roll}
+\chapter{The Golden Age of Rock 'n' Roll}
+\chapter{The In-Between Years}
+\chapter{The Beatles}
+
+\begin{itemize}
+	\item JFK assassinated \idate{Nov 22, 1963}{jfk}
+	\item Postwar Britain under the Marshall plan begins to discover American rock 'n' roll
+	\bl
+		\item Britain's first attempt at rock and roll: \imp{skiffle}
+		\bl
+			\item Very DIY
+			\item Covers of old american blues, e.g. leadbelly
+		\kl
+	\kl
+	\item The Beatles form
+	\bl
+		\item John Lennon in a skiffle group called the Quarrymen
+		\item John meets Paul McCartney after the performance, they bond over the fact that they are both unique in that they actually \textit{write} their own songs, which was not common - they decide to form a band
+		\item George Harrison joins as guitarist
+		\item Early Beatles had a rocker/motorcycle gang image
+		\item They do a lot of live shows, in East Germany etc.
+	\kl
+	\item The Beatles meet Brian Epstein
+	\bl
+		\item As manager, he changes their image to be clean and approachable - this is where the main image of the early Beatles comes from
+		\item Unable to get a record deal from any label in Britain even after trying for 6 months - this is the in-between years and few people see a future in guitar based music
+	\kl
+	\item Beatles sign to EMI \idate{1962}{beatles-emi}
+	\bl
+		\item Producer George Martin
+		\bl
+			\item He had access to a lot of variety in production equipment - used to produce comedy shows
+			\item Tells the Beatles to fire the drummer Pete Best - they do it instantly, probably because they didnt like him that much (especially John)
+			\bl
+				\item He didn't do drugs
+				\item He looked better than John
+			\kl
+			\item Ringo joins as drummer - Martin is initially unsure and has him play tambourine instead on \song{Love Me Do}{1962}
+		\kl
+	\kl
+	\item The Beatles record and release \song{Please Please Me}{1963}
+	\bl
+		\item Ringo finally playing on drums
+		\item AABA structure
+		\item Change in lyrical density for the B section, similar to Somwhere Over the Rainbow
+		\item Highest note appears at the end of the B section
+	\kl
+	\item By the end of \idate{1963}{beatles-popular}, the Beatles are massively popular
+	\bl
+		\item November 1963, they perform a show at the Royal Variety Performance and John disses the Queen
+		\item They get a big hit with 'loves you yeah yeah', and decide to go to America. EMI markets it with the phrase 'the Beatles are coming' (joke on the British are coming)
+	\kl
+	\item Beatles arrive in America \idate{1964}{beatles-america}
+	\bl
+		\item Their first stop is the Ed Sullivan show, which gets \imp{70M} viewers (over a third of the US population at the time)
+		\item Next stop is the Washington Coliseum
+		\bl
+			\item At the time, it was unusual to do a concert in a sports stadium; no one was that big
+			\item Decide to put the band in the middle of the stadium, turning 90$^\circ$ every once in a while to face different members of the audience
+			\item New equipment has to be invented to support these concerts, but they are massively successful. All of a sudden sports stadium owners realise they could be making a whole lot more money in off-season.
+		\kl
+		\item In 2 weeks, they sell 2 million albums and \$2.5M in merchandise
+	\kl
+	\item The Beatles become the template for what is to follow, for example the \imp{Mersey Beat} genre of British Blues
+	\bl
+		\item Gerry and the Pacemakers, The Searchers, and The Swinging Blue Jeans - they all play simple blues with a similar friendly look as the Beatles
+	\kl
+	\item In \idate{1965}{help-movie}, they release their second film entitled 'Help', essentially a mockumentary of the touring life
+	\item \song{Yesterday}{1965}
+	\bl
+		\item Uses a string quartet - a signifier of serious composers
+		\item More complex harmony and lyrics than their previous songs
+		\item George's idea for the arrangement - strings and guitar
+	\kl
+	\item The Beatles meet Dylan
+	\bl
+		\item The Beatles revered Dylan
+		\item He introduces them to weed and not writing terrible lyrics
+	\kl
+	\item Paul begins to write songs on his own: until now it was always Lennon and McCartney
+	\item Beatles begin to move away from themes of idealized romance, and begin to experiment even with album art (e.g. Rubber Soul)
+	\bl
+		\item Rubber Soul -  cover doesn't even have the band's name on it. The story behind the art is that they accidentally distorted a normal picture and just decided to go with it. The name of the album refers to soul music and how their songs sounded like a rubber imitation of it.
+		\item Album art becomes part of the art of the music and no longer just a marketing tool
+	\kl
+	\item Beatles release the album Revolver (\idate{1966}{beatles-revolver}); on it is the song \song{Tomorrow Never Knows}{1966}
+	\bl
+		\item Composed by John, lyrics adapted from the Tibetan book of the dead
+		\item Influence of non-Western music can be heard in the usage of \textbf{drone}
+		\item Double tracked vocals (sung twice on the same track)
+		\item \textbf{Leslie cabinet} effect: they played back Johns voice on a spinning cabinet, making it sound like he is singing through a fan
+		\item Paul has been experimenting with tape loops, which was an avant-garde technique at the time
+		\bl
+			\item Literally tape two ends of a recording together and attach it to a machine that plays it
+			\item Seagull sound is a sped up version of Paul laughing
+			\item There are about 8 loops playing in the song, physically operated by different people
+			\item Played the guitar loop backwards
+		\kl
+	\kl
+	\item The Beatles become disillusioned with live performance
+	\bl
+		\item Philippines tour, they reject dinner with the dictatorial president, becomes a controversy and the Beatles are forced to turn over their concert profits to the government and are harassed by officials
+		\item John makes the 'Beatles are bigger than Jesus' comment and it causes a huge stir
+		\item Candlestick park, San Francisco \idate{1966}{beatles-last-live} is their last performance, after which they announce they will no longer perform live.
+	\kl
+\end{itemize}
+
+
+\chapter{British Invasion}
+\section{The End of the Beatles}
+\begin{itemize}
+	\item Beatles release the single \song{Strawberry Fields Forever}{1967}, their first single since their last performance at Candlestick park
+	\item Beatles release the album Sgt. Peppers Lonely Hearts Club Band \idate{1967}{sgt-peppers}
+	\bl
+		\item Example song \song{A Day In the Life}{1967}
+		\bl
+			\item Assembled by 2 different partially completed songs written by Lennon and McCartney, an unusual choice
+			\item Transition is \textbf{aleatory} which means 'chance' - they let the musicians do whatever, progressively getting louder then playing an E.
+		\kl
+		\item First \textit{major} concept album (not the first)
+		\bl
+			\item A concept album is an album with some common theme or story connecting the songs
+			\item Originally the album was supposed to be all about childhood, though they ended up adding other songs to pad it out
+		\kl
+		\item First time that the lyrics were included on the cover of a rock album
+		\item Hippie Aesthetic
+		\bl
+			\item Rock 'n' Roll - entertainment/hit focused music (e.g. Chuck Berry)
+			\item Rock - focus on the musician as an artist, singles become albums, dancing becomes listening, etc.
+		\kl
+	\kl
+	\item The end of the Beatles
+		\bl
+			\item Brian Epstein dies of overdose - beginning of the end for the Beatles
+			\item Epstein often considered the '5th Beatle', and was the only guy keeping Paul and John on good terms
+			\item Paul leaves the band in \idate{1969}{beatles-end}
+		\kl
+\end{itemize}
+
+\section{British Blues Revival}
+\begin{itemize}
+	\item Chess Records does a tourn in the U.K. with Muddy Waters \idate{1958}{chess-records-tour}
+	\bl
+		\item Why? R\&B was becoming less popular in the in-between years in the USA but the UK was just discovering it
+		\item This tour becomes the major influence for a subculture of british blues artists: Fleetwood Mac, Cream, Clapton, Zeppelin, and the Rolling Stones
+	\kl
+	\item Rolling Stones debut in \idate{1962}{rolling-stones-debut}
+	\bl
+		\item Founder: \textbf{Brian Jones}, wants to make a band that just does old American blues covers.
+		\item Manager: \textbf{Andrew Long Oldham}
+		\bl
+			\item Tells them to stop aping the Beatles
+			\item Gives them their iconic image of ragged dress and mean attitudes
+		\kl
+		\item \idate{1963}{rolling-stones-bad} - they change into an intimidating image
+		\item Oldham pushes them to write their own songs to get more money (contrary to Jones' intention)
+		\bl
+			\item At one point, brings in Lennon and McCartney to finish writing a song for them, allowing Keith and Mick learn how to write songs
+		\kl
+		\item \song{King Bee}{1964}
+		\bl
+			\item Cover of a Slim Harpo song from '57
+			\item Does an American accent, which is unusual for british bands at the time
+		\kl
+		\item They tour in the US, not getting much success. They had not yet begun to write their own songs.
+		\item Their first big original is \song{Satisfaction}{1965} which was written in Keith's sleep. The lyrics are about American advertising. It becomes their first \#1 hit in the US.
+		\item Brian Jones doesnt like the direction of the band, leaves in 1969 after a dispute. Dies in his pool after they leave for another US tour.
+	\kl
+	\item Similarities Between and Rolling Stones
+	\bl
+		\item Managers created their image (RS Oldham, Beatles Epstein)
+		\item Opposite trajectories - Beatles for the middle class, RS was 'for the working-class'. But they came from opposite directions - Mick was fairly upper class while the Beatles were not
+		\item Product vs. Process
+		\bl
+			\item Having a goal in mind when going into the studio vs. creating something as a byproduct of experimenting
+			\item Beatles were product oriented, Rolling Stones process oriented.
+			\item Improvisation = process
+		\kl
+	\kl
+\end{itemize}
+
+\chapter{Soul and Funk}
+
+\begin{itemize}
+	\item In the US, especially in Black communities, the tables begin to turn. Influenced by the civil rights movement there was a new vision that rejected R\&B as the music of the past.
+	\item Soul
+	\bl
+		\item Three main characteristics
+		\begin{enumerate}
+			\item Gospel-Influence Vocals but not lyrical content (acrobatic, strong sense of rhythm)
+			\item Rhythym of R\&B
+			\item Arrangements and lyrical styles of TPA (to restrain the themes of R\&B)
+		\end{enumerate}
+		\item Two centers: Motown (Detroit, a.k.a. \textit{Hitsville}) and Stax (Memphis, a.k.a. \textit{Soulsville})
+	\kl
+\end{itemize}
+
+\section{Motown}
+\begin{itemize}
+	\item \idate{1959}{motown-founded}, founder Berry Gordy
+	\item The name comes from the nickname of Detroit - motor city - as it used to be a hub for industry
+	\item Gordy worked in the automotive plants and envisioned a music label that operated in the same way as an assembly line
+	\bl
+		\item New in African-American music
+		\item Had been done before but not all in one building
+	\kl
+	\item Songwriters
+	\bl
+		\item Holland/Dozier/Holland
+		\item Smokey Robinson
+	\kl
+	\item Maxine Powell
+	\bl
+		\item Teacher at a 'finishing school' that taught the performers how to behave
+		\item Wanted his artists to be able to perform in any place
+	\kl
+	\item Cholly Atkins
+	\bl
+		\item Performed the choreography, giving Motown a signature 'look'
+	\kl
+	\item The Funk Brothers: the house band
+	\bl
+		\item Loose collection of musicians who gave Motown its signature sound
+	\kl
+	\item Highly uniform product - the only difference between songs would be the singer
+	\item Example: Smokey Robinson and the Miracles \song{Youd Better Shop Around}{1960}
+	\bl
+		\item Performance: restrained, polished presentation
+		\item Lyrical content: shifted towards idealized romance
+		\item Lip synced, no band behind them
+	\kl
+	\item Example: The Supremes \song{Stop in the Name of Love}{1965}
+	\bl
+		\item Illustrates the sound of Motown
+		\item Beat and lyrics are very clear: made for dancing \textit{and} listening
+		\item Diverse instrumentation (organ, vibraphone)
+		\item Not the typical gospel vocals, smoother/breathy voice
+		\item Clarity of sound (\textit{not} the wall of sound)
+		\item Quality control
+		\bl
+			\item Motown regularly met to ensure their songs were similar quality to current top hits, hence \textbf{hitsville}
+		\kl
+	\kl
+\end{itemize}
+
+\section{Stax Records}
+\begin{itemize}
+	\item Founded by Jim \textbf{St}ewart and Estell \textbf{Ax}ton (siblings) in \idate{1959}{stax-founded}
+	\item House band was Booker T and the M.G.s (\song{Green Onions}{1962}). They weren't invisible like Motown's band
+	\item Collective decision making vs. Motown where Gordy always had the final decision
+	\item Never used multi-track recording (outright refused it)
+	\item More focused on energy than accuracy in recording
+	\item Otis Redding joins in \idate{1965}{otis-redding-stax}
+	\bl
+		\item Example: \song{Try a Little Tenderness}{1966}
+		\bl
+			\item Cover of a TPA song
+			\item Hit for Bing Crosby
+			\item Very much Gospel influenced vocals
+			\item Solid R\&B beat
+			\item No elaborate arrangement
+			\item Interacting with the band (not separated like motown)
+			\item Band: Bar-Ks
+			\item No elaborate choreography
+			\item Not looking at the cameras (motown would always)
+		\kl
+		\item Tragically dies in plane crash \idate{1967}{otis-redding-dead}
+	\kl
+	\item Sam \& Dave
+	\bl
+		\item Example: \song{Soul Man}{1967}
+		\bl
+			\item Straightforward arrangement
+			\item Strong Gospel vocals
+			\item Interactions with the band, even in recording
+			\item Mistake: brass forgot to play a note in verse 1 - Stax doesn't care since the energy is still good (\textbf{Soulsville})
+		\kl
+		\item Soul becomes a metaphor for black culture
+		\item Still an optimistic sound - by 1967 this will take a turn
+	\kl
+\end{itemize}
+
+\section{FAME}
+\begin{itemize}
+	\item Florence, Alabama Music Enterprise
+	\item 1966 - Atlantic begins working with them by sending them artists to record
+	\item House band: The Swampers
+	\item They sign \textbf{Aretha Franklin}
+	\bl
+		\item Example: \song{Respect}{1967}
+		\bl
+			\item More militant sound
+			\item Written by Otis Redding, originally about a relationship
+			\item Becomes a protest song during the '65-'67 detroit riots
+		\kl
+	\kl
+\end{itemize}
+
+\section{Funk}
+\begin{itemize}
+	\item In the wake of the \idate{1968}{mlk-assassination} MLK assassination, there was push to re-africanize culture
+	\item James Brown decides to invent Funk
+	\bl
+		\item He's been a star since the mid-late 50s
+		\item First hit was \song{Please Please Please}{1956}, which was one of the first hits with soul characteristics
+		\item Live album Live at the Apollo (1956) is considered to be the first album that reached 1M sales by an african american artist
+		\item Papas got a Brand New Bag (1965) is a crossover hit for him
+		\item Example: \song{I Feel Good}{1965}
+		\bl
+			\item Stax-like recording
+		\kl
+		\item Funk is based on 12-bar blues, with a typical composition of 2 12-bar blues separated by an AABA bridge made to appeal to white audiences.
+		\item Cold Sweat (1967) introduces funk which Brown develops by reading a bit about African music traditions
+		\item Example: \song{Get Up}{1970}
+		\bl
+			\item Not many chord changes - no longer important
+			\item No clear melody
+			\item Deprivileging harmony/melody in favor of rhythm
+			\item Privilege to rhythm and its articulation
+			\bl
+				\item Tied to the re-africanization idea
+				\item Interlocking groove based on African drum circles
+				\item Brown mostly got it correct - there's a lead drummer but mostly an egalitarian group
+			\kl
+			\item Instrumentation is still pop, but played in a percussive manner
+			\item Cyclical structure (vs. linear AABA or 12 bar blues)
+			\item \textbf{'The One'} - the first down beat has to be very clear
+			\item Another example of riff-based composition
+		\kl
+		\item Funk, beats, and loops lead to hip-hop
+	\kl
+\end{itemize}
+
+\chapter{Folk and Psychedelic Rock}
+\chapter{Hard Rock and Metal}
+\chapter{Punk, Disco, and Hip-Hop}
+
+
+\end{document}

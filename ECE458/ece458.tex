@@ -1,0 +1,230 @@
+\documentclass[11pt]{report}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{mathpazo}
+\usepackage{amsmath}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{parskip}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\tikzstyle{Si}=[circle,draw=blue,fill=blue!50,thick]
+\usepackage{listings}
+
+\lstset{numbers=left}
+
+% Make lists condensed %
+\usepackage{enumitem}
+\setlist{nosep}
+
+\begin{document}
+
+\chapter{Topic 1 - Security}
+\section{CIA Model}
+\begin{itemize}
+	\item Confidentiality
+	\begin{itemize}
+		\item Cryptography: encryption and decryption
+		\item Access Control: some policy that limits access to certain users through personal ID, etc.
+		\item Entity Authentication: ensure the ID of someone
+		\begin{itemize}
+			\item Something they have (token, key)
+			\item Something they know (password)
+			\item Something they are (fingerprint)
+		\end{itemize}
+		\item Physical security
+	\end{itemize}
+	\item Integrity
+	\begin{itemize}
+		\item Backups, checksums, ECC
+		\item Cryptography: MAC over the message or a digital signature using a private key (symmetric or asymmetric)
+	\end{itemize}
+	\item Availability
+\end{itemize}
+
+\section{Partial Plaintext Attack}
+Suppose transactions in a RFID system are encrypted as $C = Enc(k, M)$ for some 4-digit PIN $k$. Then, if a plaintext $M_0$ and its encryption $C_0$ is known, then an attacker need only try all $10^4$ PINs to compute $C' = Enc(k_i, M_0)$ until $C' = C_0$, at which point they have the PIN. This is much less than the $10^4 \cdot 2^{|M|}$ that would normally be required.
+
+\section{Buffer Overflow}
+\begin{lstlisting}
+void main() {
+	char line[10];
+	gets(line);
+}
+\end{lstlisting}
+Writing more than 10 bytes to \texttt{line} will begin to overwrite (in order):
+\begin{itemize}
+	\item The old Frame Pointer of the caller
+	\item The return address
+	\item Local variables of the caller
+\end{itemize}
+In performing a buffer overflow attack, the goal is to overwrite that return address to point into some code that the attacker has inserted.
+
+\section{Spectre Attack}
+\begin{lstlisting}
+	if (x < array1_size)
+		y = array2[array1[x] * 4096]
+\end{lstlisting}
+
+\begin{itemize}
+	\item If \texttt{x >= array1\_size} and \texttt{array1[x]} contains (for example) a secret key, then if the conditions are right the CPU will perform the memory access in line 2 while checking the condition
+	\begin{itemize}
+		\item Conditions
+		\begin{itemize}
+			\item \texttt{array1\_size} and \texttt{array2\_size[k*4096]} are uncached
+			\item The key \texttt{k=array1[x]} is cached
+			\item The branch predictor assumes that the condition will likely be true (e.g. if many previous iterations were true, this will likely happen for most branch predictors)
+		\end{itemize}
+		\item The \texttt{array2} access will miss while the branch is still being checked, and the value \texttt{array2[k*4096]} will be placed in cache even though the condition was false
+		\begin{itemize}
+			\item The time it takes to access this memory can be measured dependent on \texttt{k*4096}, from which the key k can be derived
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\section{Trusted Platform Module}
+\begin{itemize}
+	\item Standard for a secure co-processor
+	\item Principle: root of trust and transitive trust
+	\begin{itemize}
+		\item A layer X has a set D(X) called its \textbf{dependencies}
+		\item $L \in D(X)$ if at least one of the following is true:
+		\begin{itemize}
+			\item L has RW access to the data of X
+			\item L has W access to the code of X
+		\end{itemize}
+		\item Notation: $L \xleftarrow{} X$ means $L \in D(X)$
+		\begin{itemize}
+			\item $\xleftarrow{}$ is transitive
+		\end{itemize}
+	\end{itemize}
+	\item Secure boot
+	\begin{itemize}
+		\item Each segment $X_i$ verifies $X_{i+1}$ before passing execution to it
+	\end{itemize}
+	\item Authentication Authority
+	\begin{itemize}
+		\item Each layer has an AA that holds the secret key used to authenticate items in the layer above it
+		\item So X in layer J can call the AA in layer $k < J$ to generate auth data for itself that it can send to a remote party for verification
+		\begin{itemize}
+			\item E.g. a digital signature using a secret key where the public key is known by the remote
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\chapter{Topic 2 - Practical Cryptographic Schemes}
+\section{Pseudo-Random Sequence Generators (PRSG)}\label{sec:PSRG}
+\subsection{FSRs}
+A feedback shift register is an n-bit register with bits $a_{n-1}...a_0$ where at each cycle the last bit is determined according to a feedback function $f(a_{n-1} ... a_0) = f(\vec{a})$. $(a_{n-1} ... a_0) \xleftarrow{} (a_n ... a_1)$ where $a_n = f(\vec{a})$. The output bit is $a_0$. If you picture it with the LSB on the right, the output is on the right and the MSB gets loaded with the feedback function on the left in each cycle.
+
+\subsection{LFSR}\label{sec:LFSR}
+An LFSR (Linear FSR) is an FSR where $f(\vec{a}) = \sum_{i = 0}^{n-1} c_ia_i$ and $c_i \in \{0, 1\}$.
+
+An m-sequence (or maximal length or pseudo noise sequence) is the output sequence with the maximal period for an LFSR. For an N-bit LFSR this is $2^N-1$ bits long. An LFSR generates an m-sequence as its output if and only if its \textbf{characteristic polynomial} is \textbf{primitive}. LFSRs have the following properties:
+
+\begin{enumerate}
+	\item All output sequences are either periodic or \textit{eventually} periodic
+	\item The minimal polynomial of an LFSR sequence is a divisor of its characteristic polynomial
+	\item For a given LFSR, all its m-sequences are \textit{shift-equivalent} and \textit{shift-distinct} to all m-sequences \textbf{not} generated by the LFSR (i.e. by other LFSRs)
+	\item
+\end{enumerate}
+
+To explain property 2, think of it in the following way. An LFSR A has some characteristic polynomial $f(x)$. It generates a set of sequences depending on the initial conditions. Consider one such sequence $\{a_i\}$. The minimal polynomial of this sequence is the \textit{lowest degree} polynomial that, if it were the characteristic polynomial $h(x)$ of an LFSR B, B would also generate $\{a_i\}$. Property 2 states that $f(x) | h(x)$ (i.e. $f(x) = p(x)h(x)$ for some $p(x)$). As a corollary, if $f(x)$ is \textit{irreducible}, it is the minimal polynomial of all the sequences it generates. Furthermore, the minimal period of any sequence $f(x)$ generates is equal to its period.
+
+
+\subsection{Galois Fields}
+A Galois Field is a \textbf{field} with a finite number of elements. All such fields with p elements (denoted GF(p)) are isomorphic to $\mathbb{Z}_p$. The binary field GF(2) is unique with the elements $\{0, 1\}$: the operations * and + are a logical AND and XOR respectively.
+
+\subsection{Polynomials over GF(2)}
+The feedback function of an LFSR can be represented as a polynomial with coefficients in GF(2):
+\begin{equation}
+	\sum_{i=0}^{n-1}c_ix_i \leftrightarrow t(x) = \sum_{i=0}^{n-1}c_ix^i
+\end{equation}
+
+Such a polynomial is \textbf{irreducible} if it cannot be written as the product of two (non-constant) polynomials. For example $x^2-2$ is irreducible over the integers but not over the reals.
+
+Note that we can define the \textbf{period} of a polynomial as the \textit{minimum} $r$ such that $f(x) | x^r-1$. A polynomial is \textbf{primitive} if it is irreducible and its period is $2^N-1$.
+Note that primitive polynomials must have a constant term, otherwise we could factor out an x and it would thus be reducible.
+
+\subsection{Correlation}
+The cross correlation of two N-length binary sequences is given by:
+
+\begin{equation}
+	C_{a, b}(\tau) = \sum_{i=0}^{N-1} (-1)^{a_i + b_{i+\tau}}
+\end{equation}
+
+It measures how similar a shifted version of $b$ is to $a$, and is thus a function over $\tau$. When $a=b$ this is also called the \textbf{autocorrelation}. If the lengths are not the same, we can use the following notation (where $M$ is the length of b:
+
+\begin{equation}
+	\label{eqn:general-cross-correlation}
+	C_{a^T,b}(\tau) = \sum_{i=0}^{T-1}(-1)^{a_i + b_{(i + \tau) \mod M}}
+\end{equation}
+
+\textbf{Note that the operation $+$ in \autoref{eqn:general-cross-correlation} is XOR}
+
+
+\subsection{Linear Span Attack}
+The degree of the minimal polynomial of a sequence \textbf{a} of length N is called its \textbf{linear span}. In other words, the linear span of the sequence is the minimal $l$ such that an $l$-bit LFSR with initial state $(a_0, a_1, ...a_{l-1})$ generates the sequence $\{a_0 ... a_N\}$.
+
+Given \textbf{a} can we make an LFSR that generates it? Obviously $f(x) = x^N-1$ would work since we just load the whole sequence into the LFSR. Using the \textbf{Berlekamp-Massey algorithm}, we can construct the \textit{minimal} LFSR that generates \textbf{a}. \textit{By definition}, this LFSR will have degree equal to the linear span of \textbf{a}, denoted LS(\textbf{a}).
+
+As it turns out, the Berlekamp-Massey algorithm only needs 2LS(\textbf{a}) bits to perform the construction. This means that if \textbf{a} has linear span $n$, and $2n < N$, we can use the BM algorithm to construct the LFSR and then run it to generate the remaining $N-2n$ bits. This is called a linear span attack.
+
+\subsection{Nonlinear Generators}
+The goal here is to maintain the randomness and efficiency that comes from using m-sequences of LFSRs as random bitstreams, while \textit{increasing} the linear span to avoid a linear span attack. In \textbf{filtering sequence generators} we feed the full LFSR state into a nonlinear function that serves as the output bit. In \textbf{combinatorial sequence generators} we feed the output bits of M LFSRs into a nonlinear function that serves as the output. In \textbf{clock controlled} generators we use some clocked FSM to control which output bits of LFSR1 get fed into LFSR2 and then to the output.
+
+\subsection{Correlation Attack}
+When we use a \textbf{combinatorial sequence generator}, we can perform this attack to recover the initial states of the $m$ LFSRs. These states are assumed to be the keys (e.g. a stream cipher scheme could be to place the key in the LFSRs and then use the output stream as a one-time pad on the data).
+
+Let the size of LFSR $i$ be $n_i$. Let the output stream of LFSR $i$ be denoted $X_i$. Note that $0 \le i < m$. We assume that we have the output stream of $Z$, it has length $T$ and is denoted $z$. We can perform exhaustive search by trying all possible initial states and seeing if it generates Z. The complexity of this is
+\begin{equation}
+	T_0 = \prod_{i=0}^{m-1} 2^{n_i}
+\end{equation}
+
+Under some assumptions, we can improve this:
+\begin{itemize}
+	\item $X_i$ are iid binary random variables
+	\item $Z$ is a random variable whose value is $h(X_0, X_1, ... X_{m-1})$
+	\item $I_C \subseteq \{X_0, ... X_{m-1}\} \neq \emptyset$ is a set of LFSRs which, based on the structure of the overall PRSG and function $h$, we know to be \textbf{correlated} with $Z$
+\end{itemize}
+
+This last point is important; based on Kerchoff's principle, the structure of the PRSG is usually known (including the sizes and polynomials of all the LFSRs and the function $h$). It is only the key that is secret.
+
+The main idea here is that if we know that an LFSR is correlated with the output sequence, we can find its initial state \textit{independent} of the states of the other LFSRs. We will \textbf{still be doing an exhaustive search} on the LFSR (by trying every possible shift of its m-sequence), but only on one LFSR at a time.
+
+The other key idea is that if we know $P[Z = 0 | X_k = t] > \frac{1}{2}$ or $P[Z = 1 | X_k = t] > \frac{1}{2}$ for $t \in \{0, 1\}$, then for a sufficiently large sample size, we can assume that the initial state of LFSR$_k$ that generates the \textbf{highest} correlation between $Z$ and $X_k$ is most likely to be the correct one. In particular, the probability that this assumption is wrong goes to zero as the size of the output sequence we are checking goes to infinity.
+
+With this, the steps to perform a correlation attack are as follows:
+
+\begin{enumerate}
+	\item Write the truth table for the combining function $h$ with inputs $X_i$ (the 0th bit of LFSR$_i$)
+	\item Use the formula $P[Z=i|X_j=k] = \frac{P[Z=i \land X_j=k]}{P[X_j=k]} = \frac{\#[Z=i \land X_j=k]}{\#[X_j=k]}$ (where \# means the number of times the event shows up in the truth table) to compute all the conditional probabilities
+	\item Decide the set $I_C$ using step 2 ($X_i$ such that $Z$'s value has a skewed distribution relative to the value of $X_i$)
+	\item For each element $X_i \in I_C$
+	\begin{enumerate}
+		% TODO: how
+		\item Figure out the m-sequence for this LFSR and call it $x_i$ (recall that this is unique for a given LFSR up to shift-equivalence. see \autoref{sec:LFSR})
+		\item Compute $C_{z^T, x_i}(\tau)$ using \autoref{eqn:general-cross-correlation} for $\tau \in [0, 2^{n_i})$  (i.e. to check every possible shift)
+		\item Compute $\tau_0 = \text{argmax}_\tau |C_{z^T, x_i}(\tau)|$. Set the initial state of LFSR$_i$ to $x_i$ shifted by $\tau_0$
+	\end{enumerate}
+\end{enumerate}
+
+The complexity of a correlation attack is given by
+
+\begin{equation}
+	T_1 = \sum_{i=0}^{m-1}2^{n_i}
+\end{equation}
+
+
+\section{Stream Ciphers}
+A stream cipher uses a key to generate a pseudorandom sequence based on the methods described in \autoref{sec:PRSG}. This sequence is then XORed with the data (which may be of arbitrary size, hence stream instead of block) to encrypt it, analogously to the one-time pad system.
+
+\subsection{Operation}
+Stream ciphers consist of two phases: \textbf{key initialization} and \textbf{PRSG running}. During key initialization, the initial vector IV and key K are mixed. The result is then passed as the initial value to the PRSG which begins outputting a key stream that is XORed with the plaintext. The decryption scheme does the \textbf{exact same thing} and therefore needs the same IV.
+
+\subsection{RC4}
+RC4 is meant for efficient software implementation. The key-initialization algorithm (\textbf{KIA}) uses the key K to generate a permutation of all $n$-bit integers in memory. The PRSG increments a value $i$ and uses $S[S[i] + S[i + S[i]]]$ modulo $2^n-1$ as the output block (then swaps the values it used). Yes it seems like nonsense because it was, but since the system was kept secret for a while no one knew. It was used in WEP which caused a huge security issue when the code was leaked and attacks were discovered.
+
+\section{Block Ciphers}
+
+A block cipher involves an encryption and decryption algorithm. Each algorithm is essentially a function which is a one-to-one mapping of $n$-bit vectors. $n$ is called the block size. The important property is that $D \circ E = \mathbb{1}$ (that is, encrypting then decrypting a plaintext gives back the original message).
+
+\end{document}

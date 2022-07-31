@@ -1,0 +1,1 @@
+This repo contains course review documents for classes I have taken at UWaterloo. If you notice any mistakes or want to add anything feel free to submit a PR - I make no claims about the accuracy of any content here.
