@@ -9,6 +9,7 @@
 \usepackage{caption}
 \usepackage{amssymb}
 \usepackage{subcaption}
+
 \tikzstyle{Si}=[circle,draw=blue,fill=blue!50,thick]
 
 % Make lists condensed %
@@ -23,7 +24,7 @@
 
 \section{Intrinsic Semiconductors}
 
-\subsection*{Silicon}
+\subsection{Silicon}
 % TODO: draw silicon diagram
 
 Silicon is a group IV element, so it forms a covalent bond with 4 neighbours. At 0 Kelvin, the bonds are intact and no electrons are available for conduction, so it is an insulator. At room temperature, some bonds break, freeing electrons. This also creates \textbf{holes} in equal proportion. \autoref{eqn:free-electron-density} gives the number of free electrons per unit volume as a function of temperature.
@@ -40,11 +41,11 @@ Silicon is a group IV element, so it forms a covalent bond with 4 neighbours. At
 	\item $k$ is Boltzmann's constant
 \end{itemize}
 
-\subsection*{Doped Semiconductors}
+\subsection{Doped Semiconductors}
 
 Adding Phosphorous to a Silicon network adds free electrons. This creates \textbf{n-type} silicon. Adding Boron adds free holes. This creates \textbf{p-type} silicon. The dopant carriers (electrons and holes) cause two types of current to flow:
 
-\subsubsection*{Drift Current}
+\subsubsection{Drift Current}
 Drift current begins to flow when an electrical field is applied (or, equivalently, a potential difference appears) to a piece of silicon. The velocity of the carriers is given by
 \begin{align*}
 		v_{\text{p-drift}} &= \mu_p E \\
@@ -54,7 +55,7 @@ Drift current begins to flow when an electrical field is applied (or, equivalent
 Where $\mu$ is the \textbf{mobility} of the type of carrier. In silicon, $\mu_p$ is typically \textbf{lower} than $\mu_n$
 
 
-\subsubsection*{Diffusion Current}
+\subsubsection{Diffusion Current}
 Diffusion current is a result of a non-uniform density of carriers (e.g. at the boundary of two different dopings of Silicon). This is a typical differential equation problem and the main result is that this causes some carriers to travel into the rest of the silicon and even out the distribution, though the rate decreases as the process continues.
 
 \section{PN Junction}
@@ -71,19 +72,19 @@ Diffusion current is a result of a non-uniform density of carriers (e.g. at the 
 In a PN junction, we have P-type silicon touching N-type silicon. The P-type silicon has free holes from doping, and some electrons from the intrinsic Silicon (depending on temperature). The N-type silicon has free electrons, and some holes from the intrinsic Silicon (depending again on the temperature). These are respectively the \textbf{majority} and \textbf{minority} carriers of each node. Recall that positive charges move towards a \textit{lower} potential (you can think of this as positive voltages \textit{repelling} positive charges.
 
 
-\subsection*{Diffusion Current $I_D$}
+\subsection{Diffusion Current}
 As holes migrate from P to N due to diffusion, they neutralize some electrons. This \textit{uncovers} the minority carriers in N forming a slightly positive charged region in the N-type silicon near the boundary. The opposite process happens for electrons going from N to P which forms a \textbf{depletion region}. This forms a potential difference across the depletion region equal to the \textit{barrier voltage} $V_0$ that prevents more current from flowing from P to N.
 
-\subsection*{Drift Current $I_S$}
+\subsection{Drift Current}
 Minority holes in the N-type silicon that drift towards the edge of the depletion region will be \textit{accelerated} by the potential drop towards the P-type silicon. The value of this current strongly depends on the temperature since that determines the density of minority carriers in each node.
 
-\subsection*{Equilibrium}
+\subsection{Equilibrium}
 In equilibrium and open-circuit conditions, no current flows and thus $I_D = I_S$ which is maintained by the barrier voltage $V_0$. Thus, at room temperature we can experimentally determine $V_0$ for silicon as being in the range $0.6$V to $0.9$V
 
-\subsection*{Applied Voltage}
+\subsection{Applied Voltage}
 A PN junction is \textbf{reverse biased} when the net barrier voltage is positive. In this case, little to no current flows, except for a drift current that increases with the barrier voltage (as minority carriers are moved through more quickly in this case). A PN junction is \textbf{forward biased} when the applied voltage is negative. To maintain the applied voltage, there must be a source of electrons that tends to 'feed' the N-type silicon and thus drastically increases the \textbf{diffusion current}.
 
-\subsection*{Reverse Breakdown}
+\subsection{Reverse Breakdown}
  At some point, a very negative positive barrier voltage will suddenly cause a huge current to flow from N to P. This is cause either by the \textbf{zener effect} or \textbf{avalanche effect}, the details of which are outside the scope of this course.
 
 
@@ -105,11 +106,11 @@ A PN junction is \textbf{reverse biased} when the net barrier voltage is positiv
  \end{tikzpicture}
  \end{center}
 
- \subsection*{Structure}
+ \subsection{Structure}
 
  Where blue is P-type silicon, red is N-type (often you will see $n^+$ to denote that it is `heavily' doped, and $n^-$ would be lightly doped), black is metal, and gray is SiO$_2$ (the oxide part of NMOS). The thickness of this oxide layer is important, and denoted $t_{\text{ox}}$. The body is typically connected to the \textbf{source}. The Source and Drain are interchangable - there is no intrinsic difference between them in the structure of the NMOS, so the drain is whichever terminal is more positive in a given circuit - current \textbf{always} flows from drain to source.
 
- \subsection*{Operation}
+ \subsection{Operation}
  Applying a positive voltage at the gate (relative to the source) causes an electric field that pushes holes in the substrate down towards the body terminal. When the applied voltage $V_{\text{GS}}$ exceeds $V_t$, a \textbf{channel} is established - the p-type substrate essentially flips to n-type and allows electrons to flow. It is useful to define the \textbf{overdrive voltage}
 
  \begin{equation}
@@ -164,7 +165,7 @@ To solve DC MOSFET circuits, you will sometimes need to \textit{assume} regions 
 
 \section{Secondary Effects}
 
-\subsection*{Channel-Length Modulation}
+\subsection{Channel-Length Modulation}
 In saturation, using the \textbf{long-channel} model we have assumed, the transistor has infinite output resistance. This is not true as in reality, increasing $v_{DS}$ causes channel length modulation. That is, it shortens the channel and increases the potential drop between the channel and the other terminal, slightly increasing the current. This is modelled by adding the factor $\lambda = \frac{1}{V_A}$ to the saturation current where $V_A$ is the `Early voltage', as seen in \ref{eqn:clm-sat-current}. This results in a \textbf{finite} output resistance $r_o$ given by \ref{eqn:clm-sat-resistance}
 
 \begin{equation}
@@ -296,7 +297,7 @@ Note that these assume that there is no channel length modulation. Adding the CL
 
 If we were to do something similar for the drain current as a function of input voltage, we would find a curve that is 0 when the input is near a logic 0 or 1, and a spike at around $V_M$ ($\frac{V_{DD}}{2}$ for balanced circuit). This is related to the dynamic or `switching' power - it takes energy to switch this circuit.
 
-\subsection*{Noise Margins}
+\subsection{Noise Margins}
 Noise margins determine how much noise the circuit can tolerate. There are two noise margins, the margin for low input NM$_L = V_{IL} - V_{OL}$ and the margin for high input NM$_H = V_{OH} - V_{IH}$. The overall noise margin NM is the \textbf{minimum} of the two.
 
 \begin{itemize}
@@ -746,7 +747,7 @@ Note the following relationships
 Thus as the temperature decreases, we expect the circuit to operate \textit{faster}.
 
 
-\chapter{Sequential Logic}
+\chapter{Sequential Logic}\label{sec:sequential-logic}
 % TODO: FSM and Pipeline diagram
 In combinational logic we designed circuits that implement some boolean function over a set of inputs. For a given set of inputs, the output is always the same. In \textbf{sequential logic} we product outputs dependent on the current inputs and the \textit{previous} outputs or the 'state'. There are two styles of sequential logic: \textbf{Finite State-Machine} and \textbf{Pipeline}.
 
@@ -1165,8 +1166,38 @@ The ciruit is shown in \autoref{fig:3t-dram}. This is less higher density than 1
 
 \chapter{Integrated Circuit Testing}
 
-\section{Stuck-At Faults}
-\section{Combinational Logic}
+The goal is to improve the yield of circuits. It is not unusual to only get a $\sim$80\% yield in modern processes, whereas typical consumer requirements are just 5-50ppm defective. The field of IC testing is vast and is becoming bigger, here we only consider a few basic techniques for validating them.
+
+The error model we assume is that of \textit{stuck-at} faults. There are two types: stuck at 0 or stuck at 1. A stuck-at fault is usually a layout issue and causes a node to be a constant 0 or 1 regardless of the inputs (i.e. it is tied to $V_{DD}$ or GND).
+
+\section{Combinational Logic}\label{sec:combinational-test}
+We can design \textbf{test vectors} of input-output pairs that are designed to detect stuck-at faults at particular nodes. Consider the example in \autoref{fig:stuck-at-example}. A common assumption is that there may be at most one stuck-at fault - consider the case of Y being stuck at 1. If we use $(A, B, C, D) = (1, 1, 0, 0)$, then $f = 0$. If Y were stuck at one however, $f$ would be 1. This test vector thus depends on $Y$ \textit{not} being stuck at one - if we run it and it is successful, we know Y is \textit{not} stuck at one. If it fails however, we may not conclude that it is because Y is stuck at one - it could be C or D too.
+
+Using this method we can design $2N$ vectors for an $N$-node circuit to cover all possibilities. This is better than the $2^N$ exhaustive vectors and it comes from the assumption that only one stuck at fault can occur at a time.
+
+
+\begin{figure}
+\centering
+	\begin{circuitikz}
+		\draw (0,0) node(A)[above]{A} to[short,*-] ++(1,0) node(AND1)[american and port, anchor=in 1]{};
+		\draw (AND1.in 2) to[short,-*] ++(-1,0) node[below]{B};
+
+		\draw (0, -2)node(C)[above]{C} to[short, *-] ++(1.5,0) node(OR1)[american or port, anchor=bin 1]{};
+		\draw (OR1.bin 2) to[short,-*] ++(-1.5,0) node[below]{D};
+
+		\path (6, -1.5)node(AND2)[american and port]{};
+		\draw (AND1.out) -- ++(1,0) node[above]{X} |- (AND2.in 1);
+		\draw (OR1.out) -- ++(1,0) node[below]{Y} |- (AND2.in 2);
+		\draw (AND2.out) to[short, -*] ++(1,0) node[above]{f};
+	\end{circuitikz}
+	\caption{Example for Combinational Logic}\label{fig:stuck-at-example}
+\end{figure}
+
+
 \section{Sequential Logic}
+
+The method of \autoref{sec:combinational-test} cannot be used in sequential circuits. The focus here is pipelined circuits (\autoref{sec:sequential-logic}). What we do is design a \textbf{scan chain} by surrounding every flip-flop with a 2-to-1 MUX at its input (known as a \textbf{scan structure}). The MUX is enabled by a 'scan-enable' signal and if it is a 1 the input to the flip-flop comes from the scan-in signal. The scan in signal for a register in a pipeline comes from the output of the previous stage.
+
+Using this, we can manually set the state of $N$ registers in $N$ clock cycles by feeding each bit to the first register.
 
 \end{document}
