@@ -1138,7 +1138,7 @@ To ensure that the storage node is overridden, the PMOS must be weaker than the 
 Dynamic RAM is higher density, cheaper, less robust, and uses more power. It uses an enhanced source capacitance to store information. This is acheived through a special process which is why memory is manufactured in separate fabs (basically dig a well at the transistor source to increase the capacitances).
 
 \subsubsection{1T DRAM}
-Connect the NMOS gate to the wordline and its drain to the bitline. The enhanced capacitance $C_s$ is connected to ground. To read, precharge $\frac{V_{DD}}{2}$ and then connect the bitline. If it is a 0, the bitline will be driven low as charge redistributed between the bitline capacitance and $C_s$. This difference will be amplified by the sense amplifiers.
+Connect the NMOS gate to the wordline and its drain to the bitline. The enhanced capacitance $C_s$ is connected to ground. To read, precharge the bitline to $\frac{V_{DD}}{2}$ and then connect the wordline. If it is a 0, the bitline will be driven low as charge redistributed between the bitline capacitance and $C_s$. This difference will be amplified by the sense amplifiers.
 
 To write a value, we force the bitline to the desired value and turn on the wordline.
 

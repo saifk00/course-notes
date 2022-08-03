@@ -113,7 +113,7 @@ if (x < array1_size)
 \end{itemize}
 
 \chapter{Topic 2 - Practical Cryptographic Schemes}
-\section{Pseudo-Random Sequence Generators (PRSG)}\label{sec:PSRG}
+\section{Pseudo-Random Sequence Generators (PRSG)}\label{sec:PRSG}
 \subsection{FSRs}
 A feedback shift register is an n-bit register with bits $a_{n-1}...a_0$ where at each cycle the last bit is determined according to a feedback function $f(a_{n-1} ... a_0) = f(\vec{a})$. $(a_{n-1} ... a_0) \xleftarrow{} (a_n ... a_1)$ where $a_n = f(\vec{a})$. The output bit is $a_0$. If you picture it with the LSB on the right, the output is on the right and the MSB gets loaded with the feedback function on the left in each cycle.
 
@@ -226,6 +226,56 @@ RC4 is meant for efficient software implementation. The key-initialization algor
 
 \section{Block Ciphers}
 
-A block cipher involves an encryption and decryption algorithm. Each algorithm is essentially a function which is a one-to-one mapping of $n$-bit vectors. $n$ is called the block size. The important property is that $D \circ E = \mathbb{1}$ (that is, encrypting then decrypting a plaintext gives back the original message).
+A block cipher involves an encryption and decryption algorithm. Each algorithm is essentially a function which is a one-to-one mapping of $n$-bit vectors. $n$ is called the block size. The important property (correctness) is that $D \circ E = \mathbb{1}$ (that is, encrypting then decrypting a plaintext gives back the original message).
+
+Two principles in designing a block cipher:
+\begin{itemize}
+	\item \textbf{confusion}: the statistical relationship between plaintext and ciphertext should depend on many or all bits of the key
+	\item \textbf{diffusion}: each plaintext bit should affect multiple ciphertext bits (small change in input $\xrightarrow{}$ large change in output)
+\end{itemize}
+
+Examples of block ciphers include DES and AES. Common structures used in them include
+\begin{itemize}
+	\item S-boxes: substitution - essentially tabularly represented functions that map input blocks to output blocks
+	\item Feistel structures - an NLFSR
+\end{itemize}
+
+Another useful way to think of a $n$-bit block cipher is as the set of all permutations over all $2^n$ $n$-bit vectors, where the key selects which permutation to use.
+
+\subsection{Block Cipher Modes}
+We need some way to use the block cipher on data that may not be equal to the block size. Modes are the way to achieve this.
+
+\subsubsection{Electronic Codebook (ECB)}
+Divide the input into block-sized units and run the block cipher on each one individually
+
+\subsubsection{Cipher Block Chaining (CBC)}
+ECB causes two equivalent blocks to have the same output, so CBC instead uses the output of one block as an initialization vector to the next.
+
+\subsubsection{Cipher Feedback (CFB)}
+Use the key to generate a keystream from ciphertext bits. $K_i$ = $Enc_{K}(C_{i-1})$ gets XORed with the plaintext to produce $C_i = M_i \oplus K_i$. This turns the block cipher into a stream cipher.
+
+\subsubsection{Counter Mode (CTR)}
+In CFB, instead of using the ciphertext as the input to the block cipher, use a counter which gets incremented for each bit.
+
+\section{Birthday Attacks}
+
+Given a set $S$ of size $n$, the probability that two of $m$ randomly chosen elements (with replacement) are the same is given by \autoref{eqn:birthday}
+
+\begin{equation}
+	\label{eqn:birthday}
+	\approx 1 - e^{\frac{-m^2}{2n}} \le \frac{m^2}{2n}
+\end{equation}
+
+The practical result is that if an element can take $N$ different values, you can expect it to take on the same value after observing about $\sqrt{N}$ instances. That is, for an $n$-bit value, we can expect a collision after $\sqrt{2^n} = 2^\frac{n}{2}$ instances.
+
+\subsection{Time-Memory Tradeoff Attack}
+Also known as a \textit{meet-in-the-middle} attack. Suppose we know that some system is encrypting a fixed plaintext $p$ using a randomly generated key $k$ of $n$ bits (for example if every transaction in some banking system starts with encrypting 'hello'). Then we can choose $2^{\frac{n}{2}}$ random keys and store the encryption of $p$ under each of them. That is, we can compute the set $T = \{(k_i, Enc_{k_i}(p)) \ | \ i \in [0, 2^{\frac{n}{2}})\}$. We can expect to observe a key $k$ for which we have already precomputed $Enc_{k_i}(p)$ to be used after observing about $2^{\frac{n}{2}}$ transactions.
+
+That is, we have traded off the memory of storing $T$ for the time of observing another $2^{\frac{n}{2}}$ transactions, and the time complexity becomes $2^{\frac{n}{2}}$.
+
+\section{Security Models}
+\subsection{Chosen Plaintext Attack (CPA)}
+An attacker is given access to an encryption oracle that will provide $Enc(p)$ for any plaintext it is given. The goal of the attacker is to figure out which of two plaintexts $m_0$ and $m_1$ corresponds to a given ciphertext $c$. Note that since the attacker could ask for $Enc(p)$, no deterministic encryption can be CPA secure.
+
 
 \end{document}
