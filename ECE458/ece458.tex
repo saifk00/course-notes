@@ -288,14 +288,140 @@ Three important properties of a hash function:
 	\item \textbf{Pre-image resistance}: Given $z$, finding $x$ s.t. $h(x) = z$ is difficult
 \end{itemize}
 
+Note that satisfying the first property implies the other two are satisfied. The reverse is not true.
+
+A hash function maps $n$ bits to $m$ bits where $n > m$, and thus multiple values may map to the same thing. The design of hash functions is thus similar to block ciphers but with the requirement of a one-to-one mapping being relaxed.
+
 
 \section{Message Authentication Code (MAC)}
 A MAC is used in symmetric-key cryptography to verify that a message was sent by someone who knows the key $k$. There are many ways to implement it using keyed hash functions, block ciphers, or authenticated encryption. The key property is \textbf{unforgeability} - even if an attacker has access to an oracle that produces $t = MAC_{k}(m)$, it cannot produce $(m, t)$ such that Verif$(m,t) = 1$ and $m$ was not part of a query to the oracle.
 
 \section{Public Key Cryptography}
+\subsection{One-Way Functions}
+A fundamental concept in public key cryptography is that of a one-way function. A function is 'one-way' if it is 'easy' to compute its output, but difficult to compute the input given its output. A \textit{trapdoor} one-way function is a one-way function that, if one knows some special piece of information, makes it easy to compute the input given the output.
+
 
 \subsection{Diffie-Hellman Key Exchange}
+The setting for Diffie-Hellman key exchange is a finite field $\mathbb{F}_p$ with $p$ elements. $g$ is a 'primitive element' of the field; that is, each nonzero element of $\mathbb{F}_p$ can be written as $g^i$ for some integer $i$. Note that in the finite field, the addition and multiplication operations are done modulo $p$ but this will often be omitted for brevity. This is equivalent to:
+
+\begin{align}
+	\label{eqn:primitivity-1}
+	g^{p-1} &= 1\\
+	\label{eqn:primitivity-2}
+	g^{i} &\neq 1 \ \ \ \ \ \ \forall \ \ 1 \le i < p - 1
+\end{align}
+
 Each user $i$ has a keypair $(i, g^i)$. By the discrete log problem, $i$ is difficult to compute given $g^i$ (but not vice versa). Two users $a$ and $b$ can compute a shared key $k$ by sending eachother their public key. Then, user $a$ can compute $g^{ab} = (g^b)^a$ using their private key and user $b$ can do the same. Then the shared key is $g^{ab}$ which can be used to perform symmetric encryption/authentication.
+
+\subsubsection{Lagrange's Theorem}
+\autoref{eqn:primitivity-2} requires us to check $p-1$ values. Instead, we can check if an element is primitive using Lagrange's theorem. Simply put, an element $a$ is primitive if $a^{p-1}=1$ and $a^{q} \neq 1$ for all prime factors $q$ of $p-1$.
+
+For example, if $p=47$ then since $(p-1) = 46 = 23\cdot2$ we only need to check the following to verify if $a$ is primitive:
+
+\begin{align*}
+	a^{p-1} &= a^{46} = 1\\
+	a^{23} &\neq 1\\
+	a^2 &\neq 1\\
+\end{align*}
+
+\subsection{RSA}
+RSA relies on the difficulty of factoring large numbers. $\phi(n)$ is the Euler totient function and is equal to the number of integers up to $n$ that are relatively prime to it (two numbers $a, b$ are relatively prime if $\text{gcd}(a,b) = 1$). Obviously, $\phi(p) = p-1$ for prime numbers $p$ (i.e. all except itself). It also turns out that for the product of two prime numbers $p, q$: $\phi(p\cdot q) = (p-1)(q-1)$.
+
+\subsubsection{Key Generation}
+
+The process to generate the public and private keypair is as follows:
+
+\begin{enumerate}
+	\item Generate large primes $p$ and $q$
+	\item Compute $n = pq$ and $\phi(n) = (p-1)(q-1)$
+	\item Select the \textbf{public exponent} $e \in [1, \phi(n)-1]$ such that $e$ is relatively prime to $\phi(n)$
+	\item Compute $d = e^{-1} \mod{\phi(n)}$
+\end{enumerate}
+
+The \textbf{public key} is the tuple $(n, e)$. The \textbf{private key} is the tuple $(d, p, q)$.
+
+Anyone who knows $n, e$ cannot easily find $\phi(n)$ and thus can't compute $d$.
+
+\subsubsection{Encryption}
+A plaintext $m < n$ can be encrypted as $c = m^e \mod{n}$ using info from the public key.
+
+\subsubsection{Decryption}
+A ciphertext $c$ can be decrypted as $m = c^d \mod{n}$.
+
+\subsubsection{Signature (RSA-DSA)}
+A message can be signed by computing $h(m)^d \mod{n}$ for some hash function $h$ that outputs a suitably sized value. This can be verified by computing $s^e \mod{n}$ and comparing it with $h(m)$.
+
+\subsubsection{Computing d}
+ We use the extended euclidean algorithm to find $d = e^{-1}\mod{\phi(n)}$ given $e$ and $\phi(n)$. It gives us $d, k$ such that $de + k\phi(n) = 1$ and this gives us $d$.
+
+\section{Digital Signature Standard (DSS)}
+This scheme only provides signatures. It has the following elements:
+
+\begin{enumerate}
+	\item $p$ a (large) prime number
+	\item $q$ a prime factor of $(p-1)$
+	\item $g \in \mathbb{F}_p$ with $\text{ord}(g) = q$
+	\item $h$ a cryptographic hash function
+\end{enumerate}
+
+
+\subsection{Keypair}
+Signer selects some $x \in [1, q-1]$ as the private key. $y = g^x$ is the public key.
+
+\subsection{Signature}
+The signer performs the following for each message to sign:
+
+\begin{enumerate}
+	\item Randomly select $k \in [1, q-1]$
+	\item Compute $r = g^k$
+	\item Solve for $s$ in the signing equation (\autoref{eqn:dss-signing-eqn})
+\end{enumerate}
+
+\begin{equation}
+	\label{eqn:dss-signing-eqn}
+	h(m) \equiv xr + ks \mod{q}
+\end{equation}
+
+The signature is provided as the tuple $(r, s)$. Note how steps 1 and 2 reflect the keygen process. Step 3 requires the usage of the extended euclidean algorithm.
+
+\subsection{Verification}
+The verifier does the following:
+
+\begin{enumerate}
+	\item Compute $u = h(m)s^{-1} \mod{q}$ and $v = -rs^{-1}\mod{q}$
+	\item Compute $w = (g^uy^v \mod{p})\mod{q}$
+	\item Accept if $w = r$
+\end{enumerate}
+
+This works because of the following. Starting with \autoref{eqn:dss-signing-eqn} (and recalling that $r = g^k$):
+
+\begin{align*}
+	k &= h(m)s^{-1} - xrs^{-1}\\
+	g^k &= g^{h(m)s^{-1} - xrs^{-1}}\\
+	r &= g^{u}(g^x)^{-rs^{-1}}\\
+	r &= g^u y^v\\
+\end{align*}
+
+% TODO
+\section{Elliptic Curve Cryptography}
+
+An elliptic curve is a set of points $(x, y) \in F$ that satisfy some cubic equation. We can define an addition operation on this set of points to form a \textbf{group}: to add two points $P$ and $Q$ draw a line between them and set $R = (x, -y)$ where $(x, y)$ is the third point that intersects the curve (note that the $y$ coordinate is flipped). If $P=Q$ then the line connecting them is just the tangent at $P$.
+
+\subsection{ECC Finite Fields}
+We restrict our attention to points where $x, y \in \mathbb{F}_p$. Given parameters $(a, b, p)$ we can solve for all such points on the curve as follows:
+
+\begin{enumerate}
+	\item Compute all the 'quadratic residues' in $\mathbb{F}_p$. That is, the set $QR = \{i | \exists y \in \mathbb{F}_p \text{ s.t. } i = y^2 \mod{p} \}$
+	\item For all $x \in \mathbb{F}_p$, compute $x^3 + ax + b$ and see if $x \in QR$. If so, then $(x, y)$ is a point where $y^2 = x^3 + ax + b$.
+\end{enumerate}
+
+The group formed by these points is \textbf{cyclic}, that is every element is a generator. Do note that there is technically also a 'point at infinity' denoted $\infty$ or $\mathcal{O}$ which is not a generator which acts as the additive identity.
+
+\subsection{Keypair}
+A curve and field is selected, along with an arbitrary generator point $P$. The \textbf{private key} is a random integer $d$ where $0 < d < q$. The \textbf{public key} is $Q = dP$.
+
+\subsection{EC-DH}
+We can compute a shared diffie-hellman secret using $d_AQ_B = d_BQ_A = (d_Ad_B)P$.
 
 
 \end{document}
