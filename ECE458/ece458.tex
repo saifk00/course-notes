@@ -277,5 +277,25 @@ That is, we have traded off the memory of storing $T$ for the time of observing 
 \subsection{Chosen Plaintext Attack (CPA)}
 An attacker is given access to an encryption oracle that will provide $Enc(p)$ for any plaintext it is given. The goal of the attacker is to figure out which of two plaintexts $m_0$ and $m_1$ corresponds to a given ciphertext $c$. Note that since the attacker could ask for $Enc(p)$, no deterministic encryption can be CPA secure.
 
+With CBC for example, any further queries of $Enc(m_0)$ and $Enc(m_1)$ will be different since the oracle holds some state.
+
+\section{Hash Functions}
+Three important properties of a hash function:
+
+\begin{itemize}
+	\item \textbf{Collision Resistance}: Finding $x$, $y$ s.t. $h(x) = h(y)$ is difficult
+	\item \textbf{Second pre-image resistance}: Given $x$, finding $y$ s.t. $h(x) = h(y)$ is difficult
+	\item \textbf{Pre-image resistance}: Given $z$, finding $x$ s.t. $h(x) = z$ is difficult
+\end{itemize}
+
+
+\section{Message Authentication Code (MAC)}
+A MAC is used in symmetric-key cryptography to verify that a message was sent by someone who knows the key $k$. There are many ways to implement it using keyed hash functions, block ciphers, or authenticated encryption. The key property is \textbf{unforgeability} - even if an attacker has access to an oracle that produces $t = MAC_{k}(m)$, it cannot produce $(m, t)$ such that Verif$(m,t) = 1$ and $m$ was not part of a query to the oracle.
+
+\section{Public Key Cryptography}
+
+\subsection{Diffie-Hellman Key Exchange}
+Each user $i$ has a keypair $(i, g^i)$. By the discrete log problem, $i$ is difficult to compute given $g^i$ (but not vice versa). Two users $a$ and $b$ can compute a shared key $k$ by sending eachother their public key. Then, user $a$ can compute $g^{ab} = (g^b)^a$ using their private key and user $b$ can do the same. Then the shared key is $g^{ab}$ which can be used to perform symmetric encryption/authentication.
+
 
 \end{document}
