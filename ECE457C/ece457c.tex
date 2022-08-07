@@ -321,7 +321,7 @@ Advantages over DP:
 Deterministic policies may make it difficult to use MC methods to compute $q_*(s,a)$ as they cannot visit every possible action in a given state. To address this, we can specify that episodes start in a random $(s_0, a_0)$ pair to ensure that every state and action pair is visited infinitely often. This is just a trick, and the better way to do this would be to use stochastic policies.
 
 \subsection{On-Policy Prediction}
-Removing the assumption of exploring starts introduces the concepts of \textbf{off-policy} and \textbf{on-policy} methods. In \textbf{on-policy} methods, we still evaluate $v_pi$ but ensure that we still visit every action. For example, we may use 'eternally soft' $pi(a|s) > 0$ policies. We may also use $\epsilon$-soft policies (note that $A^*=\text{argmax}_{a}Q(s,a)$):
+Removing the assumption of exploring starts introduces the concepts of \textbf{off-policy} and \textbf{on-policy} methods. In \textbf{on-policy} methods, we still evaluate $v_\pi$ but ensure that we still visit every action. For example, we may use 'eternally soft' $\pi(a|s) > 0$ policies. We may also use $\epsilon$-soft policies (note that $A^*=\text{argmax}_{a}Q(s,a)$):
 
 \begin{equation}
 	\label{eqn:e-soft-policy}
@@ -713,10 +713,10 @@ Instead of minimizing a loss function as in \autoref{sec:vfa}, we maximize a per
 	\theta \xleftarrow{} \theta + \alpha \widehat{\nabla J(\theta)}
 \end{equation}
 
-$\widehat{x}$ means some unbiased estimate of $x$ (the exact value is also an unbiased estimate). Some methods approximate the policy and the value function. These are the \textbf{actor-critic} methods of \autoref{sec:actor-critic}.
+$\widehat{x}$ means some unbiased estimate of $x$ (the exact value is also an unbiased estimate). Some methods approximate the policy \textit{and} the value function. These are the \textbf{actor-critic} methods of \autoref{sec:actor-critic}.
 
 \subsection{Policy Approximation}
-Learning the policy has a few Advantages
+Learning the policy has a few advantages
 \begin{enumerate}
 	\item The policy may converge to an optimal deterministic one. This cannot be said of e.g. SARSA (\autoref{sec:SARSA})
 	\item The policy may converge to an optimal stochastic one. This cannot be said of any of the other methods discussed so far (they always get the value function for a deterministic one)

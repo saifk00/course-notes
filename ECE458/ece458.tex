@@ -546,6 +546,9 @@ A simplistic version of IKE was given in the lectures under the name 'Protocol C
 	\end{itemize}
 \end{enumerate}
 
+\subsection{Resource Exhaustion Attack}
+An attacker can spam someone with IKE requests with forged IP addresses which wastes a lot of CPU in keygen etc. As a countermeasure, we can require a cookie containing the claimed IP address and its hashed value. If the initiator can send it back then the IP address is correct and thus not forged.
+
 \section{IPSec}
 IPSec enables the protection of IP packets. There are two modes. In \textbf{transport} mode, the SA established by IKE corresponds to the sender and receiver in the IP packet - routing is done using the IP header which is then stripped and the IPSec header/payload is processed by the receiver. In \textbf{tunnel} mode, the SA established by IKE corresponds to two nodes that sit between the actual sender and receiver (e.g. security gateways in an enterprise network) - routing is done normally except the IPSec header/payload is inserted at the inner two nodes.
 
@@ -559,14 +562,47 @@ The authentication header only provides message integrity and anti-replay. It do
 \subsection{Encapsulating Security Protocol (ESP)}
 ESP can provide both confidentiality and integrity. The correct way to do this is to \textit{encrypt then authenticate}. The payload of the IP packet is encrypted, and an ICV is computed over the payload plus the SPI and sequence number. There may also be an initialization vector (IV) value if it is required by the encryption algorithm. The ICV is appended to the end of the encrypted data.
 
-
-% TODO: 393 in slides
-\section{IKE v2}
-
-
 % TODO: 414 in slides
 \section{TLS}
 
+TLS is a protocol for establishing a secure connection between a \textit{client} and \textit{server} at the transport layer. It is itself a layered protocol consisting of a record protocol and 4 client protocols. The record protocol handles the delivery of messages from the client protocols (segmentation, compression, authentication, encryption) and sits on top of some transmission-layer protocol (e.g. TCP). The four client protocols are the handshake, cipher-spec change, alert, and application data protocols. We only discuss the record layer and handshake protocols in detail, the others are fairly straightforward.
+
+\subsection{Handshake Protocol}
+A cipher suite is negotiated and server authentication is performed. There is an option to have client authentication, but it is not strictly necessary. The initiator begins by sending a \texttt{ClientHello} message containing its supported ciphersuites and a random number to be used in key establishment. The server responds with a \texttt{ServerHello} containing the selected ciphersuite which contains (usually):
+
+\begin{itemize}
+	\item A key establishment scheme which is one of
+	\begin{itemize}
+		\item Diffie-Hellman: the client and server use their long-term DH keypairs (the server's public key has been signed by a CA)
+		\item \textbf{Ephemeral} Diffie-Hellman: the client and server will generate fresh DH keypairs for this session
+		\item RSA
+	\end{itemize}
+	\item A digital signature algorithm
+	\item A symmetric-key based encryption scheme
+	\item A hash function
+\end{itemize}
+
+The server also sends a \texttt{ServerKeyExchange} message containing the ephemeral Diffie-Hellman key if DHE was selected in the ciphersuite. The client then responds with \texttt{ClientKeyExchange} containing material for shared-key establishment (i.e. $g^a$ if DH or DHE is being used or an encrypted secret in RSA) and authentication material if client auth is being used.
+
+The client and server can then generate a \textbf{pre-master secret} which is some shared secret (e.g. $g^{ab}$) using the \texttt{ServerKeyExchange} and \texttt{ClientKeyExchange} data. They combine this with the client and server nonces from \texttt{ClientHello} and \texttt{ServerHello} to generate the \textbf{master secret}.
+
+The client and server use the master secret to generate 4 keys (enc and auth for each direction of communication). They each send a final \texttt{ChangeCipherSpec} message (containing key confirmation values) before beginning to exchange encrypted application data.
+
+\subsection{Record Layer Protocol}
+The record layer protocol uses the established ciphersuites and keys to authenticate and encrypt/decrypt the application data. It can do either on its own or combine them with \textit{authenticated encryption} (e.g. Galois Counter Mode).
+
+\section{Access Authentication}
+An access authentication protocol allows an \textit{access node} to gain access to some service (e.g. a network). It is separated from the discussion of authentication since there are usually more than two parties involved and thus the trust model is slightly different.
+
+\subsection{4G-LTE Protection}
+The algorithm discussed in the course is \textbf{Evolved Encryption/Integrity Algorithm 1} (EEA1 and EIA1). They both use a stream cipher called \textbf{Snow 3G}, where integrity is performed similar to Galois Counter Mode.
+
+\subsubsection{Snow 3G}
+Snow 3G is a PRSG that consists of an LFSR and a 3-bit FSM which, when loaded with some initial state, run for 32 cycles and then fed into a linear function that serves as the output random bitstream.
+
+\subsubsection{Galois Counter Mode}
+
+\subsubsection{EEA1}
 
 \chapter{Web Security}
 
