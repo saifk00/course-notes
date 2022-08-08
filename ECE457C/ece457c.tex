@@ -249,7 +249,7 @@ Problems with directly computing $v_*$:
 Assuming we have a perfect model of the environment, we can essentially use the Bellman equation \autoref{eqn:state-bellman} as an update rule for some estimate of $v_*$ or $q_*$ respectively. This is the theoretical basis for many practical algorithms even though it is not very practical on its own.
 
 
-There are three problems that need to be solved. The first \textbf{prediction} or \textbf{evaluation}: given a policy $\pi$, what is $v_\pi$? Second is \textbf{improvement} given $\pi$ and $v_\pi$ how do we derive $\pi' \ge pi$? Finally the \textbf{control} or \textbf{iteration} problem - how do we manage the process of evaluation and iteration?
+There are three problems that need to be solved. The first \textbf{prediction} or \textbf{evaluation}: given a policy $\pi$, what is $v_\pi$? Second is \textbf{improvement} given $\pi$ and $v_\pi$ how do we derive $\pi' \ge pi$? Finally the \textbf{control} or \textbf{iteration} problem - how do we manage the process of evaluation and improvement?
 
 \section{Evaluation (or Prediction)}
 The most straightforward method is called \textbf{iterative policy evaluation}. We initialize $v_0(s)$ arbitrarily for all states except set the value of terminal states to 0 and then do:
