@@ -659,4 +659,19 @@ Like CCMP but uses Galois Counter Mode instead.
 
 \chapter{Web Security}
 
+\section{HTTPS}
+HTTPS is HTTP executed over TLS. As such, it requires a \textbf{public-key infrastructure} (PKI) that can produce certificate chains for various websites.
+
+\section{Sessions and Cookies}
+Since HTTP is stateless, cookies can be used to establish sessions. This may be vulnerable to session hijacking such as through replay or cross-site scripting (XSS) attacks.
+
+\section{Email Security}
+\subsection{Pretty Good Privacy (PGP)}
+PGP is based on a ring of trust model. A user A obtains the public key of party B by asking a party C that it already trusts.
+
+\section{Password Hashing}
+How should passwords be stored securely on a server? The first answer might be hashing since it is hard to reverse but still allows the comparison to the pre-image. However, this enables the possibility of a time-memory tradeoff attack which precomputes the hash for many common passwords known as \textbf{rainbow tables}.
+
+Instead we should \textbf{salt} the passwords before hashing them. That is, we compute a tag as $tag = h(password || salt)$ and store $(tag, salt)$ where $salt$ is a randomly generated bitstring. This increases the complexity of the TMT attack significantly (proportional to the salt size). We may also want the hash function to be more computationally complex than the ones we have already considered, as the speed is not important but slows down attackers.
+
 \end{document}
