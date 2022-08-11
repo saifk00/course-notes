@@ -529,7 +529,7 @@ A simplistic version of IKE was given in the lectures under the name 'Protocol C
 	\item B may optionally verify A's public key using a certificate. B does the following:
 	\begin{itemize}
 		\item Generates a random value $R_B$ to be used for key confirmation
-		\item Computes $\alpha = (g^a)^b$ as the shared DH secret, and a key $K_\alpha = \text{KDF}(\alpha)$ from it. We may not be able to use $\alpha$ as the key directly since it may not be large enough so KDF is often a PSRG that generates enough bits for a key using $\alpha$
+		\item Computes $\alpha = (g^a)^b$ as the shared DH secret, and a key $K_\alpha = \text{KDF}(\alpha)$ from it. We may not be able to use $\alpha$ as the key directly since it may not be large enough so KDF is often a PRSG that generates enough bits for a key using $\alpha$
 	\end{itemize}
 	\item B then sends a response containing
 	\begin{itemize}
